@@ -1,0 +1,4 @@
+*.aux
+makefile
+*.conf
+__pycache__/*
