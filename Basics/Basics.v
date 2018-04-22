@@ -258,17 +258,24 @@ Proof. simpl. reflexivity. Qed.
     should return [true] if either or both of its inputs are
     [false]. *)
 
-Definition nandb (b1:bool) (b2:bool) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition nandb (b1:bool ) (b2:bool) : bool :=
+  match b1 with
+  | true => match b2 with
+            | true => false
+            | false => true
+            end
+  | false => true
+  end.
+   (*REPLACE THIS LINE WITH ":= _your_definition_ ." . Admitted.*)
 
 Example test_nandb1:               (nandb true false) = true.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_nandb2:               (nandb false false) = true.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_nandb3:               (nandb false true) = true.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_nandb4:               (nandb true true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (andb3)  *)
@@ -276,17 +283,27 @@ Example test_nandb4:               (nandb true true) = false.
     return [true] when all of its inputs are [true], and [false]
     otherwise. *)
 
-Definition andb3 (b1:bool) (b2:bool) (b3:bool) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition andb3 (b1 : bool) (b2 : bool) (b3 : bool) : bool :=
+  match b1 with
+  | true =>
+      match b2 with
+      | true => match b3 with
+                | true => true
+                | false => false
+                end
+      | false => false
+      end
+  | false => false
+  end.
 
 Example test_andb31:                 (andb3 true true true) = true.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_andb32:                 (andb3 false true true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_andb33:                 (andb3 true false true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 Example test_andb34:                 (andb3 true true false) = false.
-(* FILL IN HERE *) Admitted.
+Proof. simpl. reflexivity.  Qed.
 (** [] *)
 
 (* ================================================================= *)
@@ -488,7 +505,7 @@ Definition minustwo (n : nat) : nat :=
 Compute (minustwo 4).
   (* ===> 2 : nat *)
 
-(** The constructor [S] has the type [nat -> nat], just like 
+(** The constructor [S] has the type [nat -> nat], just like
     [pred] and functions like [minustwo]: *)
 
 Check S.
@@ -1058,8 +1075,8 @@ Proof.
       - reflexivity. }
 Qed.
 
-(** Before closing the chapter, let's mention one final convenience.  
-    As you may have noticed, many proofs perform case analysis on a variable 
+(** Before closing the chapter, let's mention one final convenience.
+    As you may have noticed, many proofs perform case analysis on a variable
     right after introducing it:
 
        intros x y. destruct y as [|y].
