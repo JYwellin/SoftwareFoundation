@@ -33,3 +33,39 @@ Error: Found a constructor of inductive type Datatypes.nat
 ```
 
 + Then, I think "add code" is not a good idea, I should load the library. But I do not know how to work this out.
+
+## Basics:
+
++ `andb_true_elim2` is really intersting. I found two method:
+
+```coq
+Theorem andb_false : forall b : bool,
+  andb b false = false.
+Proof.
+  (intros c). (destruct c).
+    - reflexivity.
+    - reflexivity.
+Qed.
+
+Theorem andb_true_elim2 : forall b c : bool,
+  andb b c = true -> c = true.
+Proof.
+  (intros b c). destruct c.
+  - intro H. reflexivity.
+  - (rewrite andb_false). intro H. rewrite -> H. reflexivity.
+Qed.
+```
+
+```coq
+Theorem andb_true_elim2 : forall b c : bool,
+  andb b c = true -> c = true.
+Proof.
+  (intros b c). (destruct b).
+  { (destruct c).
+    { reflexivity. }
+    { simpl. intros H. rewrite -> H. reflexivity. } }
+  { (destruct c).
+    { simpl. intros H. rewrite <- H. reflexivity. }
+    { simpl. intros H. rewrite <- H. reflexivity. } }
+Qed.
+```

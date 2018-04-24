@@ -1,5 +1,7 @@
 tmp/*
 *.aux
+*.vo
+*.glob
 makefile
 *.conf
 __pycache__/*
