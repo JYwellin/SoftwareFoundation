@@ -1226,8 +1226,16 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
     _does_ terminate on all inputs, but that Coq will reject because
     of this restriction. *)
 
-(* FILL IN HERE *)
-(** [] *)
+(* ################################################################# *)
+
+(*Fixpoint mod_2(n : nat) : nat :=
+  match n with
+  | O => O
+  | S O => S O
+  | n' => mod_2(minustwo(n'))
+  end.*)
+
+(* ################################################################# *)
 
 (* ################################################################# *)
 (** * More Exercises *)
@@ -1241,14 +1249,28 @@ Theorem identity_fn_applied_twice :
   (forall (x : bool), f x = x) ->
   forall (b : bool), f (f b) = b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros f H b.
+  rewrite -> H.
+  rewrite -> H.
+  reflexivity.
+Qed.
 
 (** Now state and prove a theorem [negation_fn_applied_twice] similar
     to the previous one but where the second hypothesis says that the
     function [f] has the property that [f x = negb x].*)
 
-(* FILL IN HERE *)
-(** [] *)
+Theorem identity_fn_applied_twice' :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = negb x) ->
+  forall (b : bool), f (f b) = b.
+Proof.
+  intros f H b.
+  rewrite -> H.
+  rewrite -> H.
+  destruct b.
+  - reflexivity.
+  - reflexivity.
+Qed.
 
 (** **** Exercise: 3 stars, optional (andb_eq_orb)  *)
 (** Prove the following theorem.  (Hint: This one can be a bit tricky,
@@ -1261,7 +1283,14 @@ Theorem andb_eq_orb :
   (andb b c = orb b c) ->
   b = c.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros b c. destruct b.
+  { destruct c.
+    { reflexivity. }
+    { simpl. intros H. rewrite <- H. reflexivity. } }
+  { destruct c.
+    { simpl. intros H. rewrite <- H. reflexivity. }
+    { reflexivity. } }
+Qed.
 
 (** [] *)
 
@@ -1307,6 +1336,79 @@ Proof.
         then converting it to unary should yield the same result as
         first converting it to unary and then incrementing. *)
 
-(* FILL IN HERE *)
-(** [] *)
+(*(a)*)
 
+Inductive bin : Type :=
+  | B : bin
+  | D : bin -> bin
+  | N : bin -> bin.
+
+(*0 : B (D B, D D B... is invalided)
+1 : N B (N D B... is invalided)
+2 : D N B
+3 : N N B
+4 : D D N B
+5 : N D N B*)
+
+(*(b)*)
+
+Fixpoint incr (b : bin) : bin :=
+  match b with
+  | B => N B
+  | D b' => N (b')
+  | N b' => D (incr b')
+  end.
+
+Fixpoint bin_to_nat (b : bin) : nat :=
+  match b with
+  | B => O
+  | D b' => plus ( bin_to_nat b') (bin_to_nat b')
+  | N b' => S (plus ( bin_to_nat b') (bin_to_nat b'))
+  end.
+
+(*(c)*)
+
+Example test_bin_incr1:    incr B = N B.
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_incr2:    incr (N B) = D (N B).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_incr3:    incr (D (N B)) = N (N B).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_incr4:    incr (N (N B)) = D (D (N B)).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_incr5:    incr (D (D (N B))) = N (D (N B)).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_bin_to_nat1:    bin_to_nat B = O.
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_bin_to_nat2:    bin_to_nat (N B) = S O.
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_bin_to_nat3:    bin_to_nat (D (N B)) = S (S O).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_bin_to_nat4:    bin_to_nat (N (N B)) = S (S (S O)).
+Proof. simpl. reflexivity.  Qed.
+
+Example test_bin_bin_to_nat5:    bin_to_nat (D (D (N B))) = S (S (S (S O))).
+Proof. simpl. reflexivity.  Qed.
+
+Example bin_to_nat_incr1: S (bin_to_nat(B)) = bin_to_nat(incr(B)).
+Proof. simpl. reflexivity.  Qed.
+
+Example bin_to_nat_incr2: S (bin_to_nat(N B)) = bin_to_nat(incr(N B)).
+Proof. simpl. reflexivity.  Qed.
+
+Example bin_to_nat_incr3: S (bin_to_nat(D (N B))) = bin_to_nat(incr(D (N B))).
+Proof. simpl. reflexivity.  Qed.
+
+Example bin_to_nat_incr4: S (bin_to_nat(N (N B))) = bin_to_nat(incr(N (N B))).
+Proof. simpl. reflexivity.  Qed.
+
+Example bin_to_nat_incr5: S (bin_to_nat(D (D (N B)))) = bin_to_nat(incr(D (D (N B)))).
+Proof. simpl. reflexivity.  Qed.

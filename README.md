@@ -69,3 +69,54 @@ Proof.
     { simpl. intros H. rewrite <- H. reflexivity. } }
 Qed.
 ```
+
++ best way of `andb_eq_orb` ?
+  + My Answer is:
+
+```coq
+Theorem andb_eq_orb :
+  forall (b c : bool),
+  (andb b c = orb b c) ->
+  b = c.
+Proof.
+  intros b c. destruct b.
+  { destruct c.
+    { reflexivity. }
+    { simpl. intros H. rewrite <- H. reflexivity. } }
+  { destruct c.
+    { simpl. intros H. rewrite <- H. reflexivity. }
+    { reflexivity. } }
+Qed.
+```
+  + However, the author said: **You will probably need both `destruct` and `rewrite`, but destructing everything in sight is not the best way.**
+  + So, What is the best way?
+
++ can I use `match` in `Inductive` ?
+  + My definition of `bin` is:
+
+```coq
+Inductive bin : Type :=
+  | B : bin
+  | D : bin -> bin
+  | N : bin -> bin.
+```
+  + `D B`, `D D B` and `B` as the same. I want to make all those format to be `B` in `Inductive`, but It seem that I could not use match in Inductive. What should I do?
+
++ How to use `fixpoint` in `Theorem` ?
+  + As the book said, I want to proof S (bin_to_nat(b)) = bin_to_nat(incr(b)). However, I could not been satisfied by `Example`. So I try to proof:
+
+```coq
+Theorem bin_to_nat_incr: forall b:bin, S (bin_to_nat(b)) = bin_to_nat(incr(b)).
+Proof.
+  intros b. destruct b as [| b'| b''].
+  - reflexivity.
+  - reflexivity.
+  - simpl. reflexivity.
+Qed.
+```
+
+  + I was failed when the `b` is odd number(`b = N b''`). The compiler said: `bin_to_nat (incr b'') + bin_to_nat (incr b'')" with "S (S (bin_to_nat b'' + bin_to_nat b''))`. I cannot simpl this because there are different case depended on the value of `b''`. I have to use infinited step of `destruct b` to prove this. I found I have to recursion in this situation, but I dont know how.
+
+## BasicsTest:
+
++ How to use this? I notice that there are some `abort.` in it. But when I remove them, it could not pass the compilation.
