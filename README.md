@@ -36,7 +36,7 @@ Error: Found a constructor of inductive type Datatypes.nat
 
 ## Basics:
 
-+ `andb_true_elim2` is really intersting. I found two method:
+1. `andb_true_elim2` is really intersting. I found two method:
 
 ```coq
 Theorem andb_false : forall b : bool,
@@ -70,7 +70,7 @@ Proof.
 Qed.
 ```
 
-+ best way of `andb_eq_orb` ?
+2. best way of `andb_eq_orb` ?
   + My Answer is:
 
 ```coq
@@ -91,7 +91,7 @@ Qed.
   + However, the author said: **You will probably need both `destruct` and `rewrite`, but destructing everything in sight is not the best way.**
   + So, What is the best way?
 
-+ can I use `match` in `Inductive` ?
+3. can I use `match` in `Inductive` ?
   + My definition of `bin` is:
 
 ```coq
@@ -102,7 +102,7 @@ Inductive bin : Type :=
 ```
   + `D B`, `D D B` and `B` as the same. I want to make all those format to be `B` in `Inductive`, but It seem that I could not use match in Inductive. What should I do?
 
-+ How to use `fixpoint` in `Theorem` ?
+4. How to use `fixpoint` in `Theorem` ?
   + As the book said, I want to proof S (bin_to_nat(b)) = bin_to_nat(incr(b)). However, I could not been satisfied by `Example`. So I try to proof:
 
 ```coq
