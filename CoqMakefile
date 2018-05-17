@@ -1,4 +1,8 @@
 -R . SoftwareFoundationZZ
 
-Basics/BasicsTest.v
 Basics/Basics.v
+Basics/BasicsTest.v
+Induction/Induction.v
+Induction/InductionTest.v
+Lists/Lists.v
+Lists/ListsTest.v

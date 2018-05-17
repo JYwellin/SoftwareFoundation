@@ -122,3 +122,49 @@ Qed.
 ## BasicsTest:
 
 + How to use this? I notice that there are some `abort.` in it. But when I remove them, it could not pass the compilation.
+
+## Induction
+
+```coq
+Fixpoint nat_to_bin (n : nat) : bin :=
+  match n with
+  | O => B
+  | S O => N B
+  | S (S n') => match evenb n' with
+          | true => D (incr(bin_div_2(nat_to_bin(n'))))
+          | false => N (incr(bin_div_2(nat_to_bin(n'))))
+          end
+  end.
+```
+
+```
+Fixpoint normalize (b : bin) : bin :=
+  match b with
+  | B => B
+  | N b1 => N b1
+  | D B => B
+  | D b2 => normalize(D(normalize(b2)))
+  end.
+```
+
+```
+Definition sub_normalize (b : bin): bin :=
+  match b with
+  | B => B
+  | D B => B
+  | D b1 => D b1
+  | N b2 => N b2
+  end.
+
+Fixpoint normalize (b : bin) : bin :=
+  match b with
+  | B => B
+  | N b1 => N (normalize b1)
+  | D b2 => sub_normalize(D(normalize(b2)))
+  end.
+```
+
+```
+Definition sum : bag -> bag -> bag := app.
+(*Definition sum := app.*)
+```
